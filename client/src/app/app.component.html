@@ -1,0 +1,58 @@
+<!-- Add a container with a mic recording button and a stop button-->
+<div class="start" style="display: grid; place-items: center;" *ngIf="!interviewStarted">
+  <button (click)="startInterview()">Start</button>
+</div>
+
+<form [formGroup]="form" *ngIf="interviewStarted">
+<div class="header" style="display: flex; justify-content: space-between; margin-top: 2rem; padding-left: 2rem; padding-right: 2rem;">
+  <h1>{{question}}</h1>
+  <button (click)="muteTTS()">TTS: {{isTTS}}</button>
+</div>
+
+<div class="transcript-container" style="display: flex; flex-direction: column" *ngIf="!isTTS">
+    <div
+      #editableDiv
+      style="width: 80%; padding: 2rem; margin: 0 2rem 2rem 2rem"
+      class="editable-div"
+    >
+      <span class="large-text">Speech To Text Output</span>
+      <div
+        [ngClass]="editorMode == 'edit' ? 'editing' : ''"
+        class="transcription"
+      >
+        {{ liveTranscription }}
+      </div>
+      <textarea
+        formControlName="text"
+        [ngClass]="editorMode == 'edit' ? 'editing' : ''"
+        class="textbox"
+      ></textarea>
+    </div>
+    <div class="button-container">
+      <button type="button" class="buttons" (click)="toggleRecording()">
+        <svg xmlns="http://www.w3.org/2000/svg" height="48" width="48">
+          <path
+            [ngClass]="isRecording ? 'active' : ''"
+            d="M24 26.85q-2.15 0-3.6-1.55-1.45-1.55-1.45-3.75V9q0-2.1 1.475-3.55Q21.9 4 24 4t3.575 1.45Q29.05 6.9 29.05 9v12.55q0 2.2-1.45 3.75-1.45 1.55-3.6 1.55Zm0-11.4ZM22.5 42v-6.8q-5.3-.55-8.9-4.45-3.6-3.9-3.6-9.2h3q0 4.55 3.225 7.65Q19.45 32.3 24 32.3q4.55 0 7.775-3.1Q35 26.1 35 21.55h3q0 5.3-3.6 9.2-3.6 3.9-8.9 4.45V42ZM24 23.85q.9 0 1.475-.675.575-.675.575-1.625V9q0-.85-.6-1.425Q24.85 7 24 7t-1.45.575q-.6.575-.6 1.425v12.55q0 .95.575 1.625T24 23.85Z"
+          />
+        </svg>
+        <span *ngIf="firstRecording && !isRecording">Start Recording</span>
+        <span *ngIf="!firstRecording && !isRecording">Redo Recording</span>
+      </button>
+
+      <button
+        type="button"
+        class="buttons"
+        (click)="toggleEdit()"
+        *ngIf="!isRecording"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" height="48" width="48">
+          <path
+            [ngClass]="editorMode == 'edit' ? 'active' : ''"
+            d="M7 35h34V13H7v22Zm0 3q-1.2 0-2.1-.925Q4 36.15 4 35V13q0-1.2.9-2.1.9-.9 2.1-.9h34q1.2 0 2.1.9.9.9.9 2.1v22q0 1.15-.9 2.075Q42.2 38 41 38Zm15.5-18.75h3v-3h-3Zm0 6.25h3v-3h-3Zm-6.15-6.25h3v-3h-3Zm0 6.25h3v-3h-3Zm-6.2 0h3v-3h-3Zm0-6.25h3v-3h-3ZM15 31.75h18v-3H15Zm13.7-6.25h3v-3h-3Zm0-6.25h3v-3h-3Zm6.15 6.25h3v-3h-3Zm0-6.25h3v-3h-3ZM7 35V13v22Z"
+          />
+        </svg>
+      </button>
+    </div>
+  </div>
+</form>
